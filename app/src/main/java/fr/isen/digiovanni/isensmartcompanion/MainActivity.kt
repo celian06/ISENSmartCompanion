@@ -67,7 +67,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
         composable(BottomNavItem.Events.route) { EventsScreen(navController) }
         composable("eventDetail/{eventId}") { backStackEntry ->
             val eventId = backStackEntry.arguments?.getString("eventId")?.toInt() ?: 0
-            EventDetailScreen(eventId)
+            EventDetailScreen(eventId.toString())
         }
         composable(BottomNavItem.History.route) { HistoryScreen() }
     }
