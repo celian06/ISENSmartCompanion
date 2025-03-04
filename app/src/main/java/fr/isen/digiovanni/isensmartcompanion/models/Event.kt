@@ -1,6 +1,6 @@
 package fr.isen.digiovanni.isensmartcompanion.models
 
-import com.google.gson.annotations.SerializedName
+//import com.google.gson.annotations.SerializedName
 
 data class Event(
     val id: String,

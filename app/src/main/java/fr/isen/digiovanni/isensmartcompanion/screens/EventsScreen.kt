@@ -16,8 +16,10 @@ import androidx.navigation.NavHostController
 import androidx.compose.runtime.*
 import kotlinx.coroutines.launch
 import fr.isen.digiovanni.isensmartcompanion.api.RetrofitInstance
-
-
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
+import com.google.gson.Gson
+import fr.isen.digiovanni.isensmartcompanion.EventDetailActivity
 
 
 @Composable
@@ -58,12 +60,16 @@ fun EventsScreen(navController: NavHostController) {
 
 @Composable
 fun EventItem(event: Event, navController: NavHostController) {
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                navController.navigate("eventDetail/${event.id}")
+                val intent = Intent(context, EventDetailActivity::class.java)
+                intent.putExtra("event", Gson().toJson(event)) // Sérialisation JSON
+                context.startActivity(intent)
             }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
