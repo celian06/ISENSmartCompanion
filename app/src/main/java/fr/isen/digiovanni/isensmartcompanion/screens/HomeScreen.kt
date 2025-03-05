@@ -7,26 +7,24 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fr.isen.digiovanni.isensmartcompanion.R
-
+import fr.isen.digiovanni.isensmartcompanion.ai.GeminiAIService
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-    var userInput by remember { mutableStateOf(TextFieldValue("")) }
+    var userInput by remember { mutableStateOf("") }
     var aiResponse by remember { mutableStateOf("Ask me anything!") }
     val context = LocalContext.current
+    val aiService = remember { GeminiAIService("AIzaSyDWTgskfQGhjPylkJ5v2GS_1kM6Yo7YH2U") }
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = modifier
@@ -37,7 +35,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     ) {
         // Logo
         Image(
-            painter = painterResource(id = R.drawable.logo_isen), // Ajoute un logo dans res/drawable
+            painter = painterResource(id = R.drawable.logo_isen),
             contentDescription = "App Logo",
             modifier = Modifier.size(100.dp)
         )
@@ -64,7 +62,10 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         // Bouton pour soumettre la question
         Button(onClick = {
-            aiResponse = "Fake AI Response: ${userInput.text}" // Réponse fictive
+            // Lors de l'envoi de la question, appeler le service AI
+            coroutineScope.launch {
+                aiResponse = aiService.getAIResponse(userInput)
+            }
             Toast.makeText(context, "Question Submitted", Toast.LENGTH_SHORT).show()
         }) {
             Text("Submit")
