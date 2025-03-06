@@ -16,6 +16,7 @@ import fr.isen.digiovanni.isensmartcompanion.data.AppDatabase
 import fr.isen.digiovanni.isensmartcompanion.data.AIInteractionDao
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +77,8 @@ fun NavigationGraph(
         composable(BottomNavItem.Events.route) { EventsScreen(navController) }
         composable("eventDetail/{eventId}") { backStackEntry ->
             val eventId = backStackEntry.arguments?.getString("eventId") ?: "0"
-            EventDetailScreen(eventId)
+            val context = LocalContext.current // Récupérer le contexte local
+            EventDetailScreen(eventId, context) // Passer le contexte à EventDetailScreen
         }
         composable(BottomNavItem.History.route) {
             HistoryScreen(homeScreenViewModel = homeScreenViewModel, aiInteractionDao = aiInteractionDao)
