@@ -14,12 +14,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.isen.digiovanni.isensmartcompanion.R
 import fr.isen.digiovanni.isensmartcompanion.ai.GeminiAIService
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    homeScreenViewModel: HomeScreenViewModel
+) {
     var userInput by remember { mutableStateOf("") }
     var aiResponse by remember { mutableStateOf("Ask me anything!") }
     val context = LocalContext.current
@@ -65,6 +69,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             // Lors de l'envoi de la question, appeler le service AI
             coroutineScope.launch {
                 aiResponse = aiService.getAIResponse(userInput)
+                // Sauvegarder la question et la réponse dans la base de données
+                homeScreenViewModel.saveQuestionAnswer(userInput, aiResponse)
             }
             Toast.makeText(context, "Question Submitted", Toast.LENGTH_SHORT).show()
         }) {
@@ -76,7 +82,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         // Texte affichant la réponse de l'IA
         Text(
             text = aiResponse,
-            fontSize = 16.sp,
+            fontSize = 18.sp,
             modifier = Modifier.padding(8.dp)
         )
     }
