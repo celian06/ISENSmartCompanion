@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 @Dao
 interface AIInteractionDao {
     @Query("SELECT * FROM ai_interactions ORDER BY timestamp DESC")
-    fun getAllInteractions(): LiveData<List<AIInteraction>> // Utilisation de LiveData
+    fun getAllInteractions(): LiveData<List<AIInteraction>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertInteraction(interaction: AIInteraction)

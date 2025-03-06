@@ -25,12 +25,10 @@ class MainActivity : ComponentActivity() {
             ISENSmartCompanionTheme {
                 val navController = rememberNavController()
 
-                // Créer ou obtenir le DAO pour les opérations sur la base de données
                 val aiInteractionDao = AppDatabase.getDatabase(applicationContext).aiInteractionDao()
 
-                // Créer le ViewModel en utilisant le DAO approprié
                 val homeScreenViewModel: HomeScreenViewModel = viewModel(
-                    factory = HomeScreenViewModelFactory(aiInteractionDao) // Passer AIInteractionDao ici
+                    factory = HomeScreenViewModelFactory(aiInteractionDao)
                 )
 
                 Scaffold(
@@ -39,8 +37,8 @@ class MainActivity : ComponentActivity() {
                     NavigationGraph(
                         navController,
                         Modifier.padding(innerPadding),
-                        homeScreenViewModel, // Passer le ViewModel
-                        aiInteractionDao // Passer AIInteractionDao pour l'historique
+                        homeScreenViewModel,
+                        aiInteractionDao
                     )
                 }
             }
@@ -68,12 +66,12 @@ fun BottomNavigationBar(navController: NavHostController) {
 fun NavigationGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    homeScreenViewModel: HomeScreenViewModel, // Paramètre pour le ViewModel
-    aiInteractionDao: AIInteractionDao // Paramètre pour passer AIInteractionDao
+    homeScreenViewModel: HomeScreenViewModel,
+    aiInteractionDao: AIInteractionDao
 ) {
     NavHost(navController, startDestination = BottomNavItem.Home.route, modifier = modifier) {
         composable(BottomNavItem.Home.route) {
-            HomeScreen(homeScreenViewModel = homeScreenViewModel) // Passer le ViewModel
+            HomeScreen(homeScreenViewModel = homeScreenViewModel)
         }
         composable(BottomNavItem.Events.route) { EventsScreen(navController) }
         composable("eventDetail/{eventId}") { backStackEntry ->
@@ -81,7 +79,7 @@ fun NavigationGraph(
             EventDetailScreen(eventId)
         }
         composable(BottomNavItem.History.route) {
-            HistoryScreen(homeScreenViewModel = homeScreenViewModel, aiInteractionDao = aiInteractionDao) // Passer AIInteractionDao à HistoryScreen
+            HistoryScreen(homeScreenViewModel = homeScreenViewModel, aiInteractionDao = aiInteractionDao)
         }
     }
 }
